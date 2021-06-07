@@ -1,7 +1,6 @@
 import itertools
 
 class Graph:
-    # initializing a graph using console
     def __init__(self) -> None:
         # parameters
         self.nodes = None
@@ -11,6 +10,7 @@ class Graph:
         self.init_graph()
         print('Initialized the graph')
 
+    # initializing a graph using console
     def init_graph(self):
         print('Please enter the nodes, separate them with space.')
         print('E.g. 1 2 3 4 for nodes: {1, 2, 3, 4}')
@@ -66,14 +66,29 @@ def print_paths(paths, label='Paths:'):
         print('{}: {}'.format(i+1, paths[i]))
 
 
+# finding prime paths
+def find_prime_paths(graph):
+    simple_paths = find_simple_paths(graph)
+    prime_paths = []
+    for f in simple_paths:
+        if not any([g for g in prime_paths if (path_in(f, g)) and f != g]):
+            prime_paths.append(f)
+    print_paths(prime_paths, label='Prime Paths:')
+
+
+# check whether path f is a sub-sequence in path g
+def path_in(f, g):
+    return any(map(lambda x: g[x:x + len(f)] == f, range(len(g) - len(f) + 1)))
+
+
+
 def main():
     graph = Graph()
     graph.nodes= [1, 2, 3, 4, 5]
     graph.init_nodes= [1]
     graph.finish_nodes= [5]
     graph.edges= {1:[2, 3], 2:[4], 3:[4], 4:[2, 5], 5:[]}
-    # findPrimePaths(graph)
-    find_simple_paths(graph)
+    find_prime_paths(graph)
 
 if __name__ == "__main__":
     main()
