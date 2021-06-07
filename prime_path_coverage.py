@@ -39,7 +39,6 @@ def find_simple_paths(graph):
     for node in graph.nodes:
         simple_paths.append([node])
     simple_paths = sorted(simple_paths, key=lambda n: len(n), reverse=True)
-    print_paths(simple_paths)
     return simple_paths
 
 # algorithm for finding a simple path starting from node start and ending in node end
@@ -73,22 +72,40 @@ def find_prime_paths(graph):
     for f in simple_paths:
         if not any([g for g in prime_paths if (path_in(f, g)) and f != g]):
             prime_paths.append(f)
-    print_paths(prime_paths, label='Prime Paths:')
+    return prime_paths
 
 
 # check whether path f is a sub-sequence in path g
 def path_in(f, g):
     return any(map(lambda x: g[x:x + len(f)] == f, range(len(g) - len(f) + 1)))
 
+# find test paths
+def get_test_paths(prime_path, graph):
+    test_paths = []
+    for path in prime_path:
+        if path[0] in graph.init_nodes and path[-1] in graph.finish_nodes:
+            test_paths.append(path.copy())
+    return test_paths
+
+    
+
 
 
 def main():
     graph = Graph()
-    graph.nodes= [1, 2, 3, 4, 5]
+    '''graph.nodes= [1, 2, 3, 4, 5]
     graph.init_nodes= [1]
     graph.finish_nodes= [5]
     graph.edges= {1:[2, 3], 2:[4], 3:[4], 4:[2, 5], 5:[]}
-    find_prime_paths(graph)
+    '''
+
+    # simple_paths = find_simple_paths(graph)
+    # print_paths(simple_paths, label='Simple Paths:')    
+    prime_paths = find_prime_paths(graph)
+    print_paths(prime_paths, label='Prime Paths:')
+    test_paths = get_test_paths(prime_paths, graph)
+    print_paths(test_paths, 'Prime Paths which are also Test Paths:')
+
 
 if __name__ == "__main__":
     main()
